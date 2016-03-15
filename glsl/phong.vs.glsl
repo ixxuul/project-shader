@@ -21,11 +21,11 @@ uniform vec3 unlitColor;
 void main() {
 
 	vertPos = vec3(modelViewMatrix * vec4(position,0.0));
-    interpolatedNormal = normalize(vec3(modelViewMatrix * vec4(normal, 0.0)));
+    interpolatedNormal = normalize(vec3(normalMatrix * normal));
 
-    L = normalize(lightPosition - vertPos);
+    L = normalize(vec3(modelViewMatrix * vec4((lightPosition - vertPos),0.0)));
     R = normalize(2.0 * interpolatedNormal * max(0.0, dot(interpolatedNormal,L)) - L);
-    V = normalize(vec3(cameraPosition) - vertPos);
+    V = normalize(vec3(modelViewMatrix * vec4((cameraPosition - vertPos),0.0)));
 
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(vertPos, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

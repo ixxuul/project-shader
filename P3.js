@@ -62,6 +62,9 @@ var kSpecular = 0.8;
 var shininess = 10.0;
 var toneBalance = 0.5;
 
+var alpha = 0.5;
+var beta = 0.5;
+
 // MATERIALS
 var gouraudMaterial = new THREE.ShaderMaterial({
    uniforms: {
@@ -116,6 +119,7 @@ var toonMaterial = new THREE.ShaderMaterial({
      N : {type : 'f', value: shininess},
     litColor: {type : 'c', value: litColor},
     unlitColor: {type : 'c', value: unLitColor},
+    alpha :{type : 'f', value: alpha},
    },
 });
 
@@ -149,9 +153,20 @@ var shaderFiles = [
 ];
 
 new THREE.SourceLoader().load(shaderFiles, function(shaders) {
-  armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
-  armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
+   armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
+   armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
+
+  // armadilloMaterial.vertexShader = shaders['glsl/toon.vs.glsl'];
+  // armadilloMaterial.fragmentShader = shaders['glsl/toon.fs.glsl'];
+
+  // armadilloMaterial.vertexShader = shaders['glsl/gouraud.vs.glsl'];
+  // armadilloMaterial.fragmentShader = shaders['glsl/gouraud.fs.glsl'];
+
+  // armadilloMaterial.vertexShader = shaders['glsl/Blinn.vs.glsl'];
+  // armadilloMaterial.fragmentShader = shaders['glsl/Blinn.fs.glsl'];
+
   armadilloMaterial.needsUpdate = true;
+
 
   phongMaterial.vertexShader = shaders['glsl/phong.vs.glsl'];
   phongMaterial.fragmentShader = shaders['glsl/phong.fs.glsl'];
@@ -237,6 +252,7 @@ keyboard.domElement.addEventListener('keydown',function(event){
 
   if(keyboard.eventMatches(event,"1")){  
   //reset shader
+
 }  
   else if(keyboard.eventMatches(event,"2")){  
     //reset shader
