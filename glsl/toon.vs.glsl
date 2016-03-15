@@ -26,15 +26,15 @@ void main() {
 
     float intensity = (1.0 + max(0.0, dot(interpolatedNormal,L)))/2.0;
 
-    if(abs(dot(interpolatedNormal, V) - 0.0) < 0.1){
+    if(abs(dot(interpolatedNormal, V) - 0.0) < 0.2){
     	v_color = vec3(0.0,0.0,0.0);
-    }
+    }else{
 
     v_color = vec3(Ka * ambientColor) + 
 			  intensity * vec3(0,0,0.9) + 
 			  (1.0 - intensity) * vec3(1.0,0.5,0.5) + 
 			  vec3(Kd * pow(max(0.0,dot(R,V)),N));
-
+	}
 
  //    if (intensity > 0.95)
 	// 	v_color = vec3(1.0,0.5,0.5);
