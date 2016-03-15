@@ -1,4 +1,3 @@
-varying vec3 interpolatedNormal;
 varying vec3 v_color;
 
 uniform float Ka;
@@ -16,7 +15,7 @@ uniform vec3 unlitColor;
 
 void main() {
     vec3 vertPos = vec3(modelViewMatrix * vec4(position,0.0));
-    interpolatedNormal = normalize(vec3(modelViewMatrix * vec4(normal, 0.0)));
+    vec3 interpolatedNormal = normalize(vec3(modelViewMatrix * vec4(normal, 0.0)));
 
     //intensity = max(0.0,dot(normalize(lightPosition), interpolatedNormal));
 
@@ -24,16 +23,17 @@ void main() {
     vec3 R = normalize(2.0 * interpolatedNormal * max(0.0, dot(interpolatedNormal,L)) - L);
     vec3 V = normalize(vec3(modelViewMatrix * vec4((cameraPosition - vertPos),0.0)));
 
+    vec3 H = normalize((L+V)/2.0);  
+
     float intensity = (1.0 + max(0.0, dot(interpolatedNormal,L)))/2.0;
 
-    if(abs(dot(interpolatedNormal, V) - 0.0) < 0.2){
+    if(abs(dot(interpolatedNormal, V) - 0.0) < 0.1){
     	v_color = vec3(0.0,0.0,0.0);
     }else{
 
-    v_color = vec3(Ka * ambientColor) + 
-			  intensity * vec3(0,0,0.9) + 
-			  (1.0 - intensity) * vec3(1.0,0.5,0.5) + 
-			  vec3(Kd * pow(max(0.0,dot(R,V)),N));
+    v_color =  intensity * vec3(0,0,0.9) + 
+			  (1.0 - intensity) * vec3(1.0,0.5,0.5)
+			  + vec3(Ks * pow(dot(H,interpolatedNormal),N));
 	}
 
  //    if (intensity > 0.95)

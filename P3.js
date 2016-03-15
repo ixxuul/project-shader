@@ -153,20 +153,18 @@ var shaderFiles = [
 ];
 
 new THREE.SourceLoader().load(shaderFiles, function(shaders) {
-   armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
-   armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
+   // armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
+   // armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
 
-  // armadilloMaterial.vertexShader = shaders['glsl/toon.vs.glsl'];
-  // armadilloMaterial.fragmentShader = shaders['glsl/toon.fs.glsl'];
+  armadilloMaterial.vertexShader = shaders['glsl/toon.vs.glsl'];
+  armadilloMaterial.fragmentShader = shaders['glsl/toon.fs.glsl'];
 
   // armadilloMaterial.vertexShader = shaders['glsl/gouraud.vs.glsl'];
   // armadilloMaterial.fragmentShader = shaders['glsl/gouraud.fs.glsl'];
 
   // armadilloMaterial.vertexShader = shaders['glsl/Blinn.vs.glsl'];
   // armadilloMaterial.fragmentShader = shaders['glsl/Blinn.fs.glsl'];
-
   armadilloMaterial.needsUpdate = true;
-
 
   phongMaterial.vertexShader = shaders['glsl/phong.vs.glsl'];
   phongMaterial.fragmentShader = shaders['glsl/phong.fs.glsl'];
@@ -252,6 +250,11 @@ keyboard.domElement.addEventListener('keydown',function(event){
 
   if(keyboard.eventMatches(event,"1")){  
   //reset shader
+
+  new THREE.SourceLoader().load(shaderFiles, function(shaders) {
+  armadilloMaterial.vertexShader=shaders['glsl/gouraud.vs.glsl'];
+  armadilloMaterial.fragmentShader=shaders['glsl/gouraud.fs.glsl'];
+})
 
 }  
   else if(keyboard.eventMatches(event,"2")){  
