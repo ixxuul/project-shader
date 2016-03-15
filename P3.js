@@ -49,13 +49,88 @@ var lightColor = new THREE.Color(1,1,1);
 var ambientColor = new THREE.Color(0.4,0.4,0.4);
 var lightPosition = new THREE.Vector3(70,100,70);
 
+var litColor = new THREE.Color(0.3,0.4,0.6);
+var unLitColor = new THREE.Color(0.15,0.2,0.3);
+var outlineColor = new THREE.Color(0.04,0.1,0.15);
+
+var litArmadilloColor = new THREE.Color(0.15,0.6,0.3);
+var unLitArmadilloColor = new THREE.Color(0.04,0.3,0.15);
+
+var kAmbient = 0.4;
+var kDiffuse = 0.8;
+var kSpecular = 0.8;
+var shininess = 10.0;
+var toneBalance = 0.5;
+
 // MATERIALS
-var defaultMaterial = new THREE.MeshLambertMaterial();
+var gouraudMaterial = new THREE.ShaderMaterial({
+   uniforms: {
+     lightColor : {type : 'c', value: lightColor},
+     ambientColor : {type : 'c', value: ambientColor},
+     lightPosition : {type: 'v3', value: lightPosition},
+     Ka : {type : 'f', value: kAmbient},
+     Kd : {type : 'f', value: kDiffuse},
+     Ks : {type : 'f', value: kSpecular},
+     N : {type : 'f', value: shininess},
+    litColor: {type : 'c', value: litColor},
+    unlitColor: {type : 'c', value: unLitColor},
+   },
+});
+
+var phongMaterial = new THREE.ShaderMaterial({
+   uniforms: {
+     lightColor : {type : 'c', value: lightColor},
+     ambientColor : {type : 'c', value: ambientColor},
+     lightPosition : {type: 'v3', value: lightPosition},
+     Ka : {type : 'f', value: kAmbient},
+     Kd : {type : 'f', value: kDiffuse},
+     Ks : {type : 'f', value: kSpecular},
+     N : {type : 'f', value: shininess},
+    litColor: {type : 'c', value: litColor},
+    unlitColor: {type : 'c', value: unLitColor},
+
+   },
+});
+
+var Blinn_phongMaterial = new THREE.ShaderMaterial({
+   uniforms: {
+     lightColor : {type : 'c', value: lightColor},
+     ambientColor : {type : 'c', value: ambientColor},
+     lightPosition : {type: 'v3', value: lightPosition},
+     Ka : {type : 'f', value: kAmbient},
+     Kd : {type : 'f', value: kDiffuse},
+     Ks : {type : 'f', value: kSpecular},
+     N : {type : 'f', value: shininess},
+    litColor: {type : 'c', value: litColor},
+    unlitColor: {type : 'c', value: unLitColor},
+   },
+});
+var toonMaterial = new THREE.ShaderMaterial({
+   uniforms: {
+     lightColor : {type : 'c', value: lightColor},
+     ambientColor : {type : 'c', value: ambientColor},
+     lightPosition : {type: 'v3', value: lightPosition},
+     Ka : {type : 'f', value: kAmbient},
+     Kd : {type : 'f', value: kDiffuse},
+     Ks : {type : 'f', value: kSpecular},
+     N : {type : 'f', value: shininess},
+    litColor: {type : 'c', value: litColor},
+    unlitColor: {type : 'c', value: unLitColor},
+   },
+});
+
+
 var armadilloMaterial = new THREE.ShaderMaterial({
    uniforms: {
      lightColor : {type : 'c', value: lightColor},
      ambientColor : {type : 'c', value: ambientColor},
      lightPosition : {type: 'v3', value: lightPosition},
+     litArmadilloColor: {type : 'c', value: litArmadilloColor},
+     unlitArmadilloColor: {type : 'c', value: unLitArmadilloColor},
+     Ka : {type : 'f', value: kAmbient},
+     Kd : {type : 'f', value: kDiffuse},
+     Ks : {type : 'f', value: kSpecular},
+     N : {type : 'f', value: shininess},
    },
 });
 
@@ -63,12 +138,39 @@ var armadilloMaterial = new THREE.ShaderMaterial({
 var shaderFiles = [
   'glsl/example.vs.glsl',
   'glsl/example.fs.glsl',
+  'glsl/gouraud.vs.glsl',
+  'glsl/gouraud.fs.glsl',
+  'glsl/phong.vs.glsl',
+  'glsl/phong.fs.glsl',
+  'glsl/Blinn.vs.glsl',
+  'glsl/Blinn.fs.glsl',
+  'glsl/toon.vs.glsl',
+  'glsl/toon.fs.glsl',
 ];
 
 new THREE.SourceLoader().load(shaderFiles, function(shaders) {
   armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
   armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
   armadilloMaterial.needsUpdate = true;
+
+  phongMaterial.vertexShader = shaders['glsl/phong.vs.glsl'];
+  phongMaterial.fragmentShader = shaders['glsl/phong.fs.glsl'];
+  phongMaterial.needsUpdate = true;
+
+
+  gouraudMaterial.vertexShader = shaders['glsl/gouraud.vs.glsl'];
+  gouraudMaterial.fragmentShader = shaders['glsl/gouraud.fs.glsl'];
+  gouraudMaterial.needsUpdate = true;
+
+
+  Blinn_phongMaterial.vertexShader = shaders['glsl/Blinn.vs.glsl'];
+  Blinn_phongMaterial.fragmentShader = shaders['glsl/Blinn.fs.glsl'];
+  Blinn_phongMaterial.needsUpdate = true;
+
+  toonMaterial.vertexShader = shaders['glsl/toon.vs.glsl'];
+  toonMaterial.fragmentShader = shaders['glsl/toon.fs.glsl'];
+  toonMaterial.needsUpdate = true;
+
 })
 
 // LOAD ARMADILLO
@@ -107,33 +209,48 @@ loadOBJ('obj/armadillo.obj', armadilloMaterial, 3, 0,3,-2, 0,Math.PI,0);
 
 // CREATE SPHERES
 var sphere = new THREE.SphereGeometry(1, 32, 32);
-var gem_gouraud = new THREE.Mesh(sphere, defaultMaterial); // tip: make different materials for each sphere
+var gem_gouraud = new THREE.Mesh(sphere, gouraudMaterial); // tip: make different materials for each sphere
 gem_gouraud.position.set(-3, 1, -1);
 scene.add(gem_gouraud);
-gem_gouraud.parent = floor;
+//gem_gouraud.parent = floor;
 
-var gem_phong = new THREE.Mesh(sphere, defaultMaterial);
+var gem_phong = new THREE.Mesh(sphere, phongMaterial);
 gem_phong.position.set(-1, 1, -1);
 scene.add(gem_phong);
-gem_phong.parent = floor;
+//gem_phong.parent = floor;
 
-var gem_phong_blinn = new THREE.Mesh(sphere, defaultMaterial);
+var gem_phong_blinn = new THREE.Mesh(sphere, Blinn_phongMaterial);
 gem_phong_blinn.position.set(1, 1, -1);
 scene.add(gem_phong_blinn);
-gem_phong_blinn.parent = floor;
+//gem_phong_blinn.parent = floor;
 
-var gem_toon = new THREE.Mesh(sphere, defaultMaterial);
+var gem_toon = new THREE.Mesh(sphere, toonMaterial);
 gem_toon.position.set(3, 1, -1);
 scene.add(gem_toon);
-gem_toon.parent = floor;
+//gem_toon.parent = floor;
 
 // SETUP UPDATE CALL-BACK
 var keyboard = new THREEx.KeyboardState();
 var render = function() {
  // tip: change armadillo shading here according to keyboard
+keyboard.domElement.addEventListener('keydown',function(event){
+
+  if(keyboard.eventMatches(event,"1")){  
+  //reset shader
+}  
+  else if(keyboard.eventMatches(event,"2")){  
+    //reset shader
+  }
+    else if(keyboard.eventMatches(event,"3")){  
+    //reset shader
+  }
+    else if(keyboard.eventMatches(event,"4")){  
+    //reset shader
+  }
+});
 
  requestAnimationFrame(render);
  renderer.render(scene, camera);
-}
 
+}
 render();
