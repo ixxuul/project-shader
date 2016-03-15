@@ -153,11 +153,11 @@ var shaderFiles = [
 ];
 
 new THREE.SourceLoader().load(shaderFiles, function(shaders) {
-   // armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
-   // armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
+   armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
+   armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
 
-  armadilloMaterial.vertexShader = shaders['glsl/toon.vs.glsl'];
-  armadilloMaterial.fragmentShader = shaders['glsl/toon.fs.glsl'];
+  //armadilloMaterial.vertexShader = shaders['glsl/toon.vs.glsl'];
+  //armadilloMaterial.fragmentShader = shaders['glsl/toon.fs.glsl'];
 
   // armadilloMaterial.vertexShader = shaders['glsl/gouraud.vs.glsl'];
   // armadilloMaterial.fragmentShader = shaders['glsl/gouraud.fs.glsl'];
@@ -250,21 +250,22 @@ keyboard.domElement.addEventListener('keydown',function(event){
 
   if(keyboard.eventMatches(event,"1")){  
   //reset shader
-
-  new THREE.SourceLoader().load(shaderFiles, function(shaders) {
-  armadilloMaterial.vertexShader=shaders['glsl/gouraud.vs.glsl'];
-  armadilloMaterial.fragmentShader=shaders['glsl/gouraud.fs.glsl'];
-})
-
+  armadilloMaterial.fragmentShader = gouraudMaterial.fragmentShader;
+  armadilloMaterial.vertexShader = gouraudMaterial.vertexShader;
+  console.log(1);
 }  
   else if(keyboard.eventMatches(event,"2")){  
-    //reset shader
+    console.log(2);
   }
     else if(keyboard.eventMatches(event,"3")){  
     //reset shader
+    console.log(3);
+
   }
     else if(keyboard.eventMatches(event,"4")){  
     //reset shader
+   console.log(4);
+
   }
 });
 

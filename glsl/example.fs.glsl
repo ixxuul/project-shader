@@ -18,8 +18,9 @@ uniform vec3 litArmadilloColor;
 uniform vec3 unlitArmadilloColor;
 
 void main() {
-  gl_FragColor = vec4(vec3(unlitArmadilloColor), 1.0)+ 
+  gl_FragColor = 
+  //vec4(vec3(unlitArmadilloColor), 1.0)+ 
   vec4(vec3(Ka * ambientColor), 1.0) +
-  vec4(vec3(Kd * max(0.0,dot(interpolatedNormal,L))), 1.0)+
+  vec4(vec3(Kd * unlitArmadilloColor * max(0.0,dot(interpolatedNormal,L))), 1.0)+
   vec4(vec3(Ks * pow(max(0.0,dot(R,V)),N)), 1.0);
 }
