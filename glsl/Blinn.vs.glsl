@@ -19,7 +19,7 @@ uniform vec3 unlitColor;
 
 void main() {
     vertPos = vec3(modelViewMatrix * vec4(position,0.0));
-    interpolatedNormal = normalize(vec3(modelViewMatrix * vec4(normal, 0.0)));
+    interpolatedNormal = normalize(vec3(normalMatrix * normal));
 
     L = normalize(vec3(modelViewMatrix * vec4((lightPosition - vertPos),0.0)));
     R = normalize(2.0 * interpolatedNormal * max(0.0, dot(interpolatedNormal,L)) - L);

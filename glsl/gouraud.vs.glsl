@@ -27,7 +27,7 @@ void main() {
 
 
     vec3 Ia = vec3(Ka * ambientColor);
-    vec3 Id = vec3(Kd * max(0.0,dot(interpolatedNormal,L)));
+    vec3 Id = vec3(Kd * unlitColor * max(0.0,dot(interpolatedNormal,L)));
     vec3 Is = vec3(Ks * pow(max(0.0,dot(R,V)),N));
 
     v_color = Ia + Id + Is;

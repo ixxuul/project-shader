@@ -15,7 +15,7 @@ uniform vec3 unlitColor;
 
 void main() {
     vec3 vertPos = vec3(modelViewMatrix * vec4(position,0.0));
-    vec3 interpolatedNormal = normalize(vec3(modelViewMatrix * vec4(normal, 0.0)));
+    vec3 interpolatedNormal = normalize(vec3(normalMatrix * normal));
 
     //intensity = max(0.0,dot(normalize(lightPosition), interpolatedNormal));
 
@@ -31,11 +31,10 @@ void main() {
     	v_color = vec3(0.0,0.0,0.0);
     }else{
 
-    v_color =  intensity * vec3(0,0,0.9) + 
-			  (1.0 - intensity) * vec3(1.0,0.5,0.5)
-			  + vec3(Ks * pow(dot(H,interpolatedNormal),N));
+    v_color =  intensity * unlitColor * (vec3(0.15,0.2,0.3) + 
+			  (1.0 - intensity) * vec3(0.0,1.0,0.0));
+			  //vec3(Ks * pow(dot(H,interpolatedNormal),N));
 	}
-
  //    if (intensity > 0.95)
 	// 	v_color = vec3(1.0,0.5,0.5);
 	// else if (intensity > 0.5)

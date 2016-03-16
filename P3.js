@@ -50,7 +50,7 @@ var ambientColor = new THREE.Color(0.4,0.4,0.4);
 var lightPosition = new THREE.Vector3(70,100,70);
 
 var litColor = new THREE.Color(0.3,0.4,0.6);
-var unLitColor = new THREE.Color(0.15,0.2,0.3);
+var unLitColor = new THREE.Color(1.0,1.0,1.0);
 var outlineColor = new THREE.Color(0.04,0.1,0.15);
 
 var litArmadilloColor = new THREE.Color(0.15,0.6,0.3);
@@ -252,18 +252,34 @@ keyboard.domElement.addEventListener('keydown',function(event){
   //reset shader
   armadilloMaterial.fragmentShader = gouraudMaterial.fragmentShader;
   armadilloMaterial.vertexShader = gouraudMaterial.vertexShader;
+  console.log(armadilloMaterial.uniforms);
+  armadilloMaterial.needsUpdate = true;
+
   console.log(1);
 }  
   else if(keyboard.eventMatches(event,"2")){  
+
+  armadilloMaterial.fragmentShader = phongMaterial.fragmentShader;
+  armadilloMaterial.vertexShader = phongMaterial.vertexShader;
+  armadilloMaterial.uniforms.unLitColor= unLitArmadilloColor;
+  armadilloMaterial.needsUpdate = true;
     console.log(2);
   }
     else if(keyboard.eventMatches(event,"3")){  
     //reset shader
+  armadilloMaterial.fragmentShader = Blinn_phongMaterial.fragmentShader;
+  armadilloMaterial.vertexShader = Blinn_phongMaterial.vertexShader;
+  armadilloMaterial.unLitColor= unLitArmadilloColor;
+  armadilloMaterial.needsUpdate = true;
     console.log(3);
 
   }
     else if(keyboard.eventMatches(event,"4")){  
     //reset shader
+  armadilloMaterial.fragmentShader = toonMaterial.fragmentShader;
+  armadilloMaterial.vertexShader = toonMaterial.vertexShader;
+  armadilloMaterial.unLitColor= unLitArmadilloColor;
+  armadilloMaterial.needsUpdate = true;
    console.log(4);
 
   }
