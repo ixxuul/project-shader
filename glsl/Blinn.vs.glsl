@@ -21,9 +21,9 @@ void main() {
     vertPos = vec3(modelViewMatrix * vec4(position,0.0));
     interpolatedNormal = normalize(vec3(normalMatrix * normal));
 
-    L = normalize(vec3(modelViewMatrix * vec4((lightPosition - vertPos),0.0)));
+    L = normalize(lightPosition - vertPos);
     R = normalize(2.0 * interpolatedNormal * max(0.0, dot(interpolatedNormal,L)) - L);
-    V = normalize(vec3(modelViewMatrix * vec4((cameraPosition - vertPos),0.0)));
+    V = normalize(vec3(cameraPosition) - vertPos);
     H = normalize((L+V)/2.0);  
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

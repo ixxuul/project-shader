@@ -126,7 +126,7 @@ var toonMaterial = new THREE.ShaderMaterial({
 
 var armadilloMaterial = new THREE.ShaderMaterial({
    uniforms: {
-     lightColor : {type : 'c', value: lightColor},
+     lightColor : {type : 'c', value: litArmadilloColor},
      ambientColor : {type : 'c', value: ambientColor},
      lightPosition : {type: 'v3', value: lightPosition},
      litArmadilloColor: {type : 'c', value: litArmadilloColor},
@@ -156,14 +156,6 @@ new THREE.SourceLoader().load(shaderFiles, function(shaders) {
    armadilloMaterial.vertexShader = shaders['glsl/example.vs.glsl'];
    armadilloMaterial.fragmentShader = shaders['glsl/example.fs.glsl'];
 
-  //armadilloMaterial.vertexShader = shaders['glsl/toon.vs.glsl'];
-  //armadilloMaterial.fragmentShader = shaders['glsl/toon.fs.glsl'];
-
-  // armadilloMaterial.vertexShader = shaders['glsl/gouraud.vs.glsl'];
-  // armadilloMaterial.fragmentShader = shaders['glsl/gouraud.fs.glsl'];
-
-  // armadilloMaterial.vertexShader = shaders['glsl/Blinn.vs.glsl'];
-  // armadilloMaterial.fragmentShader = shaders['glsl/Blinn.fs.glsl'];
   armadilloMaterial.needsUpdate = true;
 
   phongMaterial.vertexShader = shaders['glsl/phong.vs.glsl'];
@@ -225,22 +217,22 @@ var sphere = new THREE.SphereGeometry(1, 32, 32);
 var gem_gouraud = new THREE.Mesh(sphere, gouraudMaterial); // tip: make different materials for each sphere
 gem_gouraud.position.set(-3, 1, -1);
 scene.add(gem_gouraud);
-//gem_gouraud.parent = floor;
+gem_gouraud.parent = floor;
 
 var gem_phong = new THREE.Mesh(sphere, phongMaterial);
 gem_phong.position.set(-1, 1, -1);
 scene.add(gem_phong);
-//gem_phong.parent = floor;
+gem_phong.parent = floor;
 
 var gem_phong_blinn = new THREE.Mesh(sphere, Blinn_phongMaterial);
 gem_phong_blinn.position.set(1, 1, -1);
 scene.add(gem_phong_blinn);
-//gem_phong_blinn.parent = floor;
+gem_phong_blinn.parent = floor;
 
 var gem_toon = new THREE.Mesh(sphere, toonMaterial);
 gem_toon.position.set(3, 1, -1);
 scene.add(gem_toon);
-//gem_toon.parent = floor;
+gem_toon.parent = floor;
 
 // SETUP UPDATE CALL-BACK
 var keyboard = new THREEx.KeyboardState();
@@ -252,24 +244,20 @@ keyboard.domElement.addEventListener('keydown',function(event){
   //reset shader
   armadilloMaterial.fragmentShader = gouraudMaterial.fragmentShader;
   armadilloMaterial.vertexShader = gouraudMaterial.vertexShader;
-  console.log(armadilloMaterial.uniforms);
-  armadilloMaterial.needsUpdate = true;
 
-  console.log(1);
+  armadilloMaterial.needsUpdate = true;
 }  
   else if(keyboard.eventMatches(event,"2")){  
 
   armadilloMaterial.fragmentShader = phongMaterial.fragmentShader;
   armadilloMaterial.vertexShader = phongMaterial.vertexShader;
-  armadilloMaterial.uniforms.unLitColor= unLitArmadilloColor;
+
   armadilloMaterial.needsUpdate = true;
-    console.log(2);
   }
     else if(keyboard.eventMatches(event,"3")){  
     //reset shader
   armadilloMaterial.fragmentShader = Blinn_phongMaterial.fragmentShader;
   armadilloMaterial.vertexShader = Blinn_phongMaterial.vertexShader;
-  armadilloMaterial.unLitColor= unLitArmadilloColor;
   armadilloMaterial.needsUpdate = true;
     console.log(3);
 
@@ -278,7 +266,6 @@ keyboard.domElement.addEventListener('keydown',function(event){
     //reset shader
   armadilloMaterial.fragmentShader = toonMaterial.fragmentShader;
   armadilloMaterial.vertexShader = toonMaterial.vertexShader;
-  armadilloMaterial.unLitColor= unLitArmadilloColor;
   armadilloMaterial.needsUpdate = true;
    console.log(4);
 

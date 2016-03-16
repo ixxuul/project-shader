@@ -19,6 +19,6 @@ uniform vec3 unlitColor;
 
 void main() {
   gl_FragColor = vec4(vec3(Ka * ambientColor), 1.0) +
-  vec4(vec3(Kd * unlitColor * max(0.0,dot(interpolatedNormal,L))), 1.0)+
-  vec4(vec3(Ks * pow(max(0.0,dot(R,V)),N)), 1.0);
+  vec4(vec3(Kd * lightColor * max(0.0,dot(interpolatedNormal,L))), 1.0)+
+  vec4(vec3(Ks * lightColor * pow(max(0.0,dot(R,V)),N)), 1.0);
 }
